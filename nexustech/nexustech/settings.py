@@ -32,7 +32,7 @@ if os.environ.get('ENVIRONMENT') == "development":
 else: 
     DEBUG = False
 
-ALLOWED_HOSTS = ['thialms.pythonanywhere.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
