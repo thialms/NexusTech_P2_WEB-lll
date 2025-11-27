@@ -41,7 +41,8 @@
     <h2 class="text-xl font-semibold text-cyan-400 border-t border-slate-700 pt-8 mt-8 mb-6 uppercase tracking-wider">Loot Adquirido</h2>
     
     {% if pedidos %}
-        <div class="overflow-hidden rounded-xl border border-slate-700 shadow-lg">
+        <!-- Desktop Table -->
+        <div class="hidden md:block overflow-hidden rounded-xl border border-slate-700 shadow-lg">
             <table class="min-w-full divide-y divide-slate-700">
                 <thead class="bg-slate-900">
                     <tr>
@@ -70,6 +71,26 @@
                     {% endfor %}
                 </tbody>
             </table>
+        </div>
+
+        <!-- Mobile Cards -->
+        <div class="md:hidden space-y-4">
+            {% for pedido in pedidos %}
+            <div class="bg-slate-900 rounded-xl border border-slate-700 p-4 shadow-lg">
+                <div class="flex justify-between items-start mb-3">
+                    <h3 class="font-bold text-white text-lg">{{ pedido.produto.nome }}</h3>
+                    <span class="text-xs text-slate-500 bg-slate-800 px-2 py-1 rounded border border-slate-700">{{ pedido.data|date:"d/m/Y" }}</span>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                    <div class="text-slate-400">
+                        Qtd: <span class="text-white font-medium">{{ pedido.quantidade }}</span>
+                    </div>
+                    <div class="text-cyan-400 font-bold text-lg">
+                        R$ {{ pedido.total|floatformat:2 }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
         </div>
     {% else %}
         <div class="text-center p-8 border border-dashed border-slate-700 rounded-xl bg-slate-900/50">
