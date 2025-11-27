@@ -4,6 +4,6 @@
     "tailwindcss": "^4.1.17"
   },
   "scripts": {
-    "css:watch":"npx @tailwindcss/cli -i ./litterae_libri/static/css/base.css -o ./litterae_libri/static/css/style.css --watch"
+    "css:watch":"npx @tailwindcss/cli -i ./nexustech/static/css/base.css -o ./nexustech/static/css/style.css --watch"
   }
 }

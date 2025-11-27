@@ -62,7 +62,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'litterae_libri.urls'
+ROOT_URLCONF = 'nexustech.urls'
 
 TEMPLATES = [
     {
@@ -79,7 +79,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'litterae_libri.wsgi.application'
+WSGI_APPLICATION = 'nexustech.wsgi.application'
 
 
 # Database

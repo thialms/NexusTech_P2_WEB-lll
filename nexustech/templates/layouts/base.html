@@ -30,6 +30,9 @@
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
                         'pulse-glow': 'pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'fade-in': 'fadeIn 0.8s ease-out forwards',
+                        'slide-up': 'slideUp 0.8s ease-out forwards',
+                        'slide-in-right': 'slideInRight 0.5s ease-out forwards',
                     },
                     keyframes: {
                         float: {
@@ -39,6 +42,18 @@
                         'pulse-glow': {
                             '0%, 100%': { opacity: 1, boxShadow: '0 0 20px rgba(34, 211, 238, 0.5)' },
                             '50%': { opacity: .8, boxShadow: '0 0 10px rgba(34, 211, 238, 0.2)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        slideInRight: {
+                            '0%': { transform: 'translateX(20px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' },
                         }
                     }
                 }
@@ -85,9 +100,9 @@
 
             <div class="flex items-center space-x-6">
                 {% if request.path == '/' %}
-                <a href="#sobre" class="text-slate-400 hover:text-cyan-400 transition duration-200 hidden md:inline text-sm uppercase tracking-widest font-semibold">Sobre</a>
-                <a href="#produtos" class="text-slate-400 hover:text-cyan-400 transition duration-200 hidden md:inline text-sm uppercase tracking-widest font-semibold">Arsenal</a>
-                <a href="#contato" class="text-slate-400 hover:text-cyan-400 transition duration-200 hidden md:inline text-sm uppercase tracking-widest font-semibold">Contato</a>
+                <a href="#sobre" class="text-slate-400 hover:text-cyan-400 transition duration-200 hidden md:inline text-sm uppercase tracking-widest font-semibold hover:scale-105 transform">Sobre</a>
+                <a href="#produtos" class="text-slate-400 hover:text-cyan-400 transition duration-200 hidden md:inline text-sm uppercase tracking-widest font-semibold hover:scale-105 transform">Arsenal</a>
+                <a href="#contato" class="text-slate-400 hover:text-cyan-400 transition duration-200 hidden md:inline text-sm uppercase tracking-widest font-semibold hover:scale-105 transform">Contato</a>
                 {% endif %} 
                 
                 {% if user.is_authenticated %}
@@ -162,7 +177,7 @@
         {% endif %}
     </div>
 
-    <main class="container mx-auto px-4 py-8 grow">
+    <main class="container mx-auto px-4 py-8 grow animate-fade-in">
         {% block content %}
 
         {% endblock content %}

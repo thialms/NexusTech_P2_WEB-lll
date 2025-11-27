@@ -7,7 +7,7 @@ from django.core.files.base import ContentFile
 # Adiciona o diretório atual ao path para encontrar o settings
 sys.path.append(os.getcwd())
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'litterae_libri.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'nexustech.settings')
 django.setup()
 
 from institucional.models import Pagina

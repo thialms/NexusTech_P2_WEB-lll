@@ -47,8 +47,8 @@
 
     <!-- Features Section -->
     <section class="py-10 px-4 -mt-24 relative z-20">
-        <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-slate-800/80 backdrop-blur-md p-6 rounded-xl border border-slate-700 shadow-xl flex items-center space-x-4 hover:border-cyan-500/50 transition duration-300">
+        <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 animate-slide-up" style="animation-delay: 0.3s;">
+            <div class="bg-slate-800/80 backdrop-blur-md p-6 rounded-xl border border-slate-700 shadow-xl flex items-center space-x-4 hover:border-cyan-500/50 transition duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-cyan-500/10">
                 <div class="p-3 bg-cyan-500/10 rounded-lg text-cyan-400">
                     <i data-lucide="truck" class="w-8 h-8"></i>
                 </div>
@@ -57,7 +57,7 @@
                     <p class="text-sm text-slate-400">Receba seu loot em tempo recorde.</p>
                 </div>
             </div>
-            <div class="bg-slate-800/80 backdrop-blur-md p-6 rounded-xl border border-slate-700 shadow-xl flex items-center space-x-4 hover:border-violet-500/50 transition duration-300">
+            <div class="bg-slate-800/80 backdrop-blur-md p-6 rounded-xl border border-slate-700 shadow-xl flex items-center space-x-4 hover:border-violet-500/50 transition duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-violet-500/10">
                 <div class="p-3 bg-violet-500/10 rounded-lg text-violet-400">
                     <i data-lucide="shield-check" class="w-8 h-8"></i>
                 </div>
@@ -66,7 +66,7 @@
                     <p class="text-sm text-slate-400">Proteção total para seu equipamento.</p>
                 </div>
             </div>
-            <div class="bg-slate-800/80 backdrop-blur-md p-6 rounded-xl border border-slate-700 shadow-xl flex items-center space-x-4 hover:border-emerald-500/50 transition duration-300">
+            <div class="bg-slate-800/80 backdrop-blur-md p-6 rounded-xl border border-slate-700 shadow-xl flex items-center space-x-4 hover:border-emerald-500/50 transition duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-emerald-500/10">
                 <div class="p-3 bg-emerald-500/10 rounded-lg text-emerald-400">
                     <i data-lucide="headphones" class="w-8 h-8"></i>
                 </div>
@@ -82,7 +82,7 @@
         {% if pagina %}
         <div class="grid md:grid-cols-2 gap-16 items-center">
 
-            <div class="order-2 md:order-1 space-y-6">
+            <div class="order-2 md:order-1 space-y-6 animate-slide-in-right" style="animation-delay: 0.4s;">
                 <div class="inline-block">
                     <h2 class="text-3xl font-display font-bold text-white mb-1 uppercase tracking-widest">Sobre Nós</h2>
                     <div class="h-1 w-full bg-linear-to-r from-cyan-500 to-transparent rounded-full"></div>
@@ -99,7 +99,7 @@
                 </div>
             </div>
 
-            <div class="order-1 md:order-2 relative">
+            <div class="order-1 md:order-2 relative animate-fade-in" style="animation-delay: 0.2s;">
                 <div class="absolute -inset-4 bg-linear-to-r from-cyan-500 to-violet-500 rounded-2xl opacity-20 blur-lg"></div>
                 {% if pagina.imagem_sobre %}
                     <img src="{{ pagina.imagem_sobre.url }}" alt="Imagem Institucional" class="relative w-full h-auto object-cover rounded-xl border border-slate-700 shadow-2xl">
@@ -123,7 +123,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 justify-items-center relative z-10">
             
             {% for item in itens_catalogo %}
-            <div class="group bg-slate-900/80 backdrop-blur-sm rounded-xl border border-slate-700 hover:border-cyan-500 transition-all duration-300 overflow-hidden w-full max-w-sm hover:shadow-[0_0_30px_rgba(6,182,212,0.2)] flex flex-col relative">
+            <div class="group bg-slate-900/80 backdrop-blur-sm rounded-xl border border-slate-700 hover:border-cyan-500 transition-all duration-300 overflow-hidden w-full max-w-sm hover:shadow-[0_0_30px_rgba(6,182,212,0.2)] flex flex-col relative hover:scale-105 transform">
                 <!-- Tech Corner Decoration -->
                 <div class="absolute top-0 right-0 w-16 h-16 overflow-hidden z-20">
                     <div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-cyan-500"></div>
