@@ -1,0 +1,85 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Perfil de {{ user.username }} - Nexus Tech & Games{% endblock title %}
+
+{% block content %}
+<div class="bg-slate-800 p-8 rounded-2xl shadow-2xl border border-slate-700">
+    <div class="flex items-center space-x-6 border-b border-slate-700 pb-6 mb-8">
+        <div class="p-4 bg-slate-900 rounded-full border border-cyan-500/30">
+            <i data-lucide="user-circle" class="w-12 h-12 text-cyan-400"></i>
+        </div>
+        <div>
+            <h1 class="text-3xl font-bold text-white">Olá, {{ usuario.first_name|default:usuario.username }}!</h1>
+            <p class="text-slate-400">Command Center</p>
+        </div>
+    </div>
+
+    <h2 class="text-xl font-semibold text-cyan-400 mb-4 uppercase tracking-wider">Stats do Jogador</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10 text-sm">
+        <div class="p-4 bg-slate-900 rounded-lg border border-slate-700">
+            <p class="font-medium text-slate-500 mb-1">Nome de Usuário</p>
+            <p class="text-slate-200 text-lg">{{ usuario.username }}</p>
+        </div>
+        <div class="p-4 bg-slate-900 rounded-lg border border-slate-700">
+            <p class="font-medium text-slate-500 mb-1">E-mail</p>
+            <p class="text-slate-200 text-lg">{{ usuario.email }}</p>
+        </div>
+        <div class="p-4 bg-slate-900 rounded-lg border border-slate-700">
+            <p class="font-medium text-slate-500 mb-1">Nome Completo</p>
+            <p class="text-slate-200 text-lg">{{ usuario.first_name }} {{ usuario.last_name }}</p>
+        </div>
+        {% if usuario.data_nascimento %}
+            <div class="p-4 bg-slate-900 rounded-lg border border-slate-700">
+                <p class="font-medium text-slate-500 mb-1">Data de Nascimento</p>
+                <p class="text-slate-200 text-lg">{{ usuario.data_nascimento|date:"d/m/Y" }}</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <h2 class="text-xl font-semibold text-cyan-400 border-t border-slate-700 pt-8 mt-8 mb-6 uppercase tracking-wider">Loot Adquirido</h2>
+    
+    {% if pedidos %}
+        <div class="overflow-hidden rounded-xl border border-slate-700 shadow-lg">
+            <table class="min-w-full divide-y divide-slate-700">
+                <thead class="bg-slate-900">
+                    <tr>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Equipamento</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Qtd</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Valor XP</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Data do Drop</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-slate-800 divide-y divide-slate-700">
+                    {% for pedido in pedidos %}
+                    <tr class="hover:bg-slate-700/50 transition duration-150">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+                            {{ pedido.produto.nome }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-400">
+                            {{ pedido.quantidade }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-cyan-400">
+                            R$ {{ pedido.total|floatformat:2 }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                            {{ pedido.data|date:"d/m/Y H:i" }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="text-center p-8 border border-dashed border-slate-700 rounded-xl bg-slate-900/50">
+            <p class="text-slate-500 mb-4">Nenhum pedido registrado.</p>
+            <a href="{% url 'index' %}" class="inline-flex items-center justify-center px-6 py-2 rounded-lg font-medium text-slate-900 bg-cyan-400 hover:bg-cyan-300 transition duration-200">
+                <i data-lucide="search" class="w-4 h-4 mr-2"></i>
+                Explorar Catálogo
+            </a>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock content %}

@@ -1,0 +1,225 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock title %}</title>
+    
+    <!-- Google Fonts: Orbitron & Exo 2 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS via CDN para garantir estilização imediata -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Exo 2"', 'sans-serif'],
+                        display: ['"Orbitron"', 'sans-serif'],
+                    },
+                    colors: {
+                        slate: {
+                            850: '#172033',
+                            950: '#020617',
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        'pulse-glow': {
+                            '0%, 100%': { opacity: 1, boxShadow: '0 0 20px rgba(34, 211, 238, 0.5)' },
+                            '50%': { opacity: .8, boxShadow: '0 0 10px rgba(34, 211, 238, 0.2)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #020617; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #22d3ee; 
+        }
+        
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-950 text-slate-100 font-sans flex flex-col min-h-screen selection:bg-cyan-500 selection:text-white relative">
+    <!-- Global Background Pattern -->
+    <div class="fixed inset-0 z-0 pointer-events-none opacity-20" style="background-image: radial-gradient(#334155 1px, transparent 1px); background-size: 32px 32px;"></div>
+    
+    <header class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
+        <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+
+            <a href="{% url 'index' %}" class="text-2xl font-display font-bold bg-clip-text bg-linear-to-r from-cyan-400 to-violet-400 hover:to-cyan-300 transition duration-300 tracking-wider uppercase">
+                Nexus<span class="text-violet-400">Tech</span>
+            </a>
+
+            <div class="flex items-center space-x-6">
+                {% if request.path == '/' %}
+                <a href="#sobre" class="text-slate-400 hover:text-cyan-400 transition duration-200 hidden md:inline text-sm uppercase tracking-widest font-semibold">Sobre</a>
+                <a href="#produtos" class="text-slate-400 hover:text-cyan-400 transition duration-200 hidden md:inline text-sm uppercase tracking-widest font-semibold">Arsenal</a>
+                <a href="#contato" class="text-slate-400 hover:text-cyan-400 transition duration-200 hidden md:inline text-sm uppercase tracking-widest font-semibold">Contato</a>
+                {% endif %} 
+                
+                {% if user.is_authenticated %}
+                    <a href="{% url 'perfil' %}" class="hidden md:inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium text-cyan-400 border border-cyan-500/30 bg-cyan-500/10 hover:bg-cyan-500/20 transition duration-200">
+                        <i data-lucide="user" class="w-4 h-4 mr-2"></i>
+                        <span class="text-sm">{{ user.first_name|default:user.username }}</span>
+                    </a>
+                    <form method="post" action="{% url 'logout' %}" class="hidden md:inline-flex">
+                        {% csrf_token %}
+                        <button type="submit" class="inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium text-red-400 border border-red-500/30 hover:bg-red-500/10 transition duration-200" title="Sair" aria-label="Sair">
+                            <i data-lucide="log-out" class="w-4 h-4"></i>
+                        </button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'cadastro' %}" class="hidden md:inline-flex items-center justify-center px-5 py-2 rounded-full font-bold text-slate-900 bg-cyan-400 hover:bg-cyan-300 transition duration-200 shadow-[0_0_15px_rgba(34,211,238,0.4)]">
+                        Cadastre-se
+                    </a>
+                    <a href="{% url 'login' %}" class="hidden md:inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium text-slate-300 hover:text-white transition duration-200">
+                        Login
+                    </a>
+                {% endif %}
+
+                <button id="mobile-menu-toggle" class="md:hidden text-slate-300 hover:text-cyan-400" aria-label="Abrir menu">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </nav>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="md:hidden absolute left-0 right-0 top-full mt-0 bg-slate-900 border-b border-slate-800 shadow-2xl z-40 p-4 transform -translate-y-3 opacity-0 pointer-events-none invisible transition-all duration-300 ease-out">
+            <div class="container mx-auto px-4">
+                <nav class="flex flex-col space-y-4">
+                    {% if request.path == '/' %}
+                    <a href="#sobre" class="text-slate-400 hover:text-cyan-400">Sobre</a>
+                    <a href="#produtos" class="text-slate-400 hover:text-cyan-400">Arsenal</a>
+                    <a href="#contato" class="text-slate-400 hover:text-cyan-400">Contato</a>
+                    {% endif %}
+
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'perfil' %}" class="w-full inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium text-cyan-400 bg-slate-800 border border-slate-700">
+                            <i data-lucide="user" class="w-5 h-5 mr-2"></i>
+                            <span class="text-sm">{{ user.first_name|default:user.username }}</span>
+                        </a>
+                        <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="w-full inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium text-red-400 border border-red-900 bg-slate-800 hover:bg-slate-700 transition duration-200">
+                                <i data-lucide="log-out" class="w-5 h-5 mr-2"></i>
+                                <span class="text-sm">Sair</span>
+                            </button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'cadastro' %}" class="inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium text-slate-900 bg-cyan-400 hover:bg-cyan-300">Cadastre-se</a>
+                        <a href="{% url 'login' %}" class="inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium text-cyan-400 border border-cyan-400 hover:bg-cyan-400/10">Login</a>
+                    {% endif %}
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 mt-6">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="p-4 mb-4 rounded border-l-4 shadow-lg backdrop-blur-sm
+                    {% if message.tags == 'success' %}bg-green-900/30 border-green-500 text-green-300{% elif message.tags == 'error' %}bg-red-900/30 border-red-500 text-red-300{% elif message.tags == 'warning' %}bg-yellow-900/30 border-yellow-500 text-yellow-300{% else %}bg-blue-900/30 border-blue-500 text-blue-300{% endif %}">
+                    <div class="flex items-center">
+                        {% if message.tags == 'success' %}<i data-lucide="check-circle" class="w-5 h-5 mr-2"></i>
+                        {% elif message.tags == 'error' %}<i data-lucide="alert-circle" class="w-5 h-5 mr-2"></i>
+                        {% else %}<i data-lucide="info" class="w-5 h-5 mr-2"></i>{% endif %}
+                        {{ message }}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <main class="container mx-auto px-4 py-8 grow">
+        {% block content %}
+
+        {% endblock content %}
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; {% now "Y" %} Nexus Tech & Games. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle do menu móvel: alterna a classe 'hidden' no elemento #mobile-menu
+        (function(){
+            const btn = document.getElementById('mobile-menu-toggle');
+            const menu = document.getElementById('mobile-menu');
+            if (!btn || !menu) return;
+
+            btn.setAttribute('aria-expanded', 'false');
+            btn.addEventListener('click', function(e){
+                e.stopPropagation();
+                const isClosed = menu.classList.contains('-translate-y-3') || menu.classList.contains('invisible');
+                if (isClosed) {
+                    menu.classList.remove('-translate-y-3', 'opacity-0', 'pointer-events-none', 'invisible');
+                    menu.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto', 'visible');
+                    btn.setAttribute('aria-expanded', 'true');
+                } else {
+                    menu.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto', 'visible');
+                    menu.classList.add('-translate-y-3', 'opacity-0', 'pointer-events-none', 'invisible');
+                    btn.setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            // Fecha o menu ao clicar fora
+            document.addEventListener('click', function(ev){
+                    if (!menu.classList.contains('-translate-y-3')){
+                        if (!menu.contains(ev.target) && !btn.contains(ev.target)){
+                            menu.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto', 'visible');
+                            menu.classList.add('-translate-y-3', 'opacity-0', 'pointer-events-none', 'invisible');
+                            btn.setAttribute('aria-expanded', 'false');
+                        }
+                    }
+            });
+
+            // Fecha o menu ao redimensionar para desktop
+            window.addEventListener('resize', function(){
+                if (window.innerWidth >= 768) {
+                    if (!menu.classList.contains('-translate-y-3')){
+                        menu.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto', 'visible');
+                        menu.classList.add('-translate-y-3', 'opacity-0', 'pointer-events-none', 'invisible');
+                        btn.setAttribute('aria-expanded', 'false');
+                    }
+                }
+            });
+        })();
+
+        lucide.createIcons();
+    </script>
+</body>
+</html>

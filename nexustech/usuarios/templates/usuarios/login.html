@@ -1,0 +1,71 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block title %}Login - Nexus Tech & Games{% endblock title %}
+
+{% block content %}
+<div class="flex min-h-[80vh] items-center justify-center">
+    <div class="w-full max-w-5xl bg-slate-800 rounded-2xl shadow-2xl overflow-hidden border border-slate-700 flex flex-col md:flex-row">
+        
+        <!-- Left Side - Image -->
+        <div class="hidden md:block md:w-1/2 relative">
+            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1000&auto=format&fit=crop" alt="Gaming Setup" class="absolute inset-0 w-full h-full object-cover">
+            <div class="absolute inset-0 bg-linear-to-t from-slate-900 via-slate-900/60 to-transparent flex flex-col justify-end p-12">
+                <h2 class="text-4xl font-display font-bold text-white mb-2 uppercase tracking-widest">Bem-vindo de volta</h2>
+                <p class="text-slate-300 font-light tracking-wide">Sua jornada continua. Acesse seu painel e gerencie seu arsenal.</p>
+            </div>
+        </div>
+
+        <!-- Right Side - Form -->
+        <div class="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center relative overflow-hidden">
+            <!-- Decorative elements -->
+            <div class="absolute top-0 right-0 w-24 h-24 bg-cyan-500/10 rounded-bl-full -mr-12 -mt-12 blur-2xl"></div>
+            <div class="absolute bottom-0 left-0 w-32 h-32 bg-violet-500/10 rounded-tr-full -ml-16 -mb-16 blur-2xl"></div>
+
+            <div class="text-center mb-8 relative z-10">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-none skew-x-[-10deg] bg-slate-900 border border-cyan-500/30 mb-4 shadow-[0_0_15px_rgba(34,211,238,0.2)]">
+                    <i data-lucide="lock" class="w-8 h-8 text-cyan-400 skew-x-[10deg]"></i>
+                </div>
+                <h1 class="text-3xl font-display font-bold text-white uppercase tracking-wider">Acesso ao Sistema</h1>
+                <p class="text-slate-400 text-sm mt-2 font-mono">Identifique-se, Jogador</p>
+            </div>
+
+            <form method="post" class="space-y-5 relative z-10">
+                {% csrf_token %}
+
+                {% for field in form %}
+                    <div>
+                        <label for="{{ field.id_for_label }}" class="block text-sm font-display font-bold text-slate-300 mb-1 uppercase tracking-wide">{{ field.label }}</label>
+                        <input type="{{ field.widget_type }}" name="{{ field.name }}" id="{{ field.id_for_label }}" 
+                               class="w-full px-4 py-3 bg-slate-900/80 border border-slate-700 rounded-none skew-x-[-5deg] text-white placeholder-slate-500 focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 transition duration-150"
+                               placeholder="{{ field.label }}" required>
+
+                        {% if field.errors %}
+                            <div class="mt-2 text-sm text-red-400 bg-red-900/20 p-2 border border-red-900/30 skew-x-[-5deg]">
+                                {{ field.errors|striptags }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                {% if form.non_field_errors %}
+                    <div class="mt-4 text-sm text-red-400 bg-red-900/20 p-3 border border-red-900/30 skew-x-[-5deg]">
+                        {{ form.non_field_errors|striptags }}
+                    </div>
+                {% endif %}
+
+                <button type="submit" class="w-full flex items-center justify-center px-4 py-3 border border-transparent text-base font-display font-bold rounded-none skew-x-[-10deg] text-slate-900 bg-cyan-400 hover:bg-cyan-300 transition duration-300 shadow-[0_0_20px_rgba(34,211,238,0.3)] hover:shadow-[0_0_30px_rgba(34,211,238,0.5)] mt-6 uppercase tracking-wider group">
+                    <span class="skew-x-[10deg] flex items-center">
+                        <i data-lucide="log-in" class="w-5 h-5 mr-2 group-hover:translate-x-1 transition-transform"></i>
+                        Entrar
+                    </span>
+                </button>
+            </form>
+            
+            <div class="mt-8 text-center border-t border-slate-700 pt-6 relative z-10">
+                <p class="text-sm text-slate-400">Não tem uma conta? <a href="{% url 'cadastro' %}" class="font-display font-bold text-cyan-400 hover:text-cyan-300 uppercase tracking-wide ml-1">Criar conta agora</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,118 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load l10n %}
+
+{% block title %}Finalizar Pedido - {{ item.nome }} | Nexus Tech{% endblock title %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto bg-slate-800/80 backdrop-blur-md p-8 rounded-none border border-slate-700 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative overflow-hidden">
+    <!-- Tech corners -->
+    <div class="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-cyan-500"></div>
+    <div class="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-cyan-500"></div>
+    <div class="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-cyan-500"></div>
+    <div class="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-cyan-500"></div>
+
+    <h1 class="text-4xl font-display font-bold text-center text-white mb-8 border-b border-slate-700 pb-4 uppercase tracking-widest drop-shadow-lg">Confirmar Drop</h1>
+    
+    <div class="flex flex-col md:flex-row gap-10 relative z-10">
+        <div class="md:w-2/3">
+            <h2 class="text-xl font-display font-bold text-cyan-400 mb-4 uppercase tracking-wider flex items-center">
+                <i data-lucide="cpu" class="w-5 h-5 mr-2"></i>
+                Equipamento Selecionado
+            </h2>
+
+            <div class="p-6 border border-slate-700 bg-slate-900/50 flex justify-between gap-6 relative group hover:border-cyan-500/50 transition-colors duration-300">
+                <div class="grow">
+                    <h3 class="text-2xl font-display font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">{{ item.nome }}</h3>
+                    <p class="text-sm text-slate-400 mb-4 leading-relaxed font-light">{{ item.descricao|truncatechars:150 }}</p>
+                    <div class="flex items-center gap-4">
+                        <p class="text-3xl font-display font-bold text-cyan-400">R$ {{ item.preco|floatformat:2 }}</p>
+                        <span class="px-2 py-1 bg-slate-800 text-xs text-slate-400 border border-slate-700 font-mono">Estoque: {{ item.estoque }}</span>
+                    </div>
+                </div>
+                <div class="min-w-32">
+                    {% if item.foto %}
+                        <img src="{{ item.foto.url }}" alt="Capa: {{ item.nome }}" class="w-32 h-48 object-cover shadow-lg border border-slate-700 group-hover:border-cyan-500/50 transition-colors">
+                    {% else %}
+                        <img src="https://placehold.co/300x400/1e293b/22d3ee?text=Item&font=roboto" alt="Capa: {{ item.nome }}" class="w-32 h-48 object-cover shadow-lg border border-slate-700">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="md:w-1/3">
+            <div class="bg-slate-900 p-6 border border-slate-700 sticky top-24 shadow-xl">
+                <h2 class="text-xl font-display font-bold text-white mb-6 uppercase tracking-wider border-b border-slate-800 pb-2">Resumo do Pedido</h2>
+                <form method="post" class="space-y-6">
+                    {% csrf_token %}
+
+                    <div>
+                        <label for="quantidade" class="block text-sm font-display font-bold text-slate-400 mb-2 uppercase tracking-wide">Quantidade</label>
+                        <input type="number" 
+                               name="quantidade" 
+                               id="quantidade" 
+                               value="1" 
+                               min="1" 
+                               max="{{ item.estoque }}"
+                               required
+                               class="w-full px-4 py-3 bg-slate-800 border border-slate-600 text-white text-center text-xl font-bold focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 transition duration-150 font-mono">
+                        {% if item.estoque < 5 %}
+                            <p class="mt-2 text-xs text-yellow-500 flex items-center justify-center font-mono">
+                                <i data-lucide="alert-triangle" class="w-3 h-3 mr-1"></i>
+                                Restam apenas {{ item.estoque }} unidades!
+                            </p>
+                        {% endif %}
+                    </div>
+
+                    <div class="py-4 border-t border-b border-slate-700">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-slate-400 font-light uppercase text-sm">Subtotal</span>
+                            <span class="text-white font-mono" id="subtotal-display">R$ {{ item.preco|floatformat:2 }}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-display font-bold text-white uppercase">Total</span>
+                            <span id="total-display" class="text-2xl font-display font-bold text-cyan-400">
+                                R$ {{ item.preco|floatformat:2 }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full flex items-center justify-center px-4 py-4 border border-transparent text-lg font-display font-bold rounded-none skew-x-[-10deg] text-slate-900 bg-cyan-400 hover:bg-cyan-300 transition duration-300 shadow-[0_0_20px_rgba(34,211,238,0.3)] hover:shadow-[0_0_30px_rgba(34,211,238,0.5)] transform hover:-translate-y-1 uppercase tracking-wider group">
+                        <span class="skew-x-[10deg] flex items-center">
+                            <i data-lucide="check-circle" class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform"></i>
+                            Resgatar Loot
+                        </span>
+                    </button>
+                </form>
+                
+                <a href="{% url 'index' %}" class="mt-4 text-center block text-sm text-slate-500 hover:text-red-400 transition-colors font-mono uppercase tracking-wide">
+                    &lt; Abortar Missão /&gt;
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const precoUnitario = parseFloat("{{ item.preco|unlocalize }}");
+    const inputQuantidade = document.getElementById('quantidade');
+    const totalDisplay = document.getElementById('total-display');
+    const subtotalDisplay = document.getElementById('subtotal-display');
+
+    function formatarMoeda(valor) {
+        return 'R$ ' + valor.toFixed(2).replace('.', ',');
+    }
+
+    function atualizarTotal() {
+        const quantidade = parseInt(inputQuantidade.value) || 1;
+        const total = precoUnitario * quantidade;
+        const textoFormatado = formatarMoeda(total);
+        totalDisplay.innerText = textoFormatado;
+        subtotalDisplay.innerText = textoFormatado;
+    }
+
+    inputQuantidade.addEventListener('input', atualizarTotal);
+    atualizarTotal(); 
+</script>
+{% endblock content %}
